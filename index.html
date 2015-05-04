@@ -18,12 +18,12 @@
     	padding: 0;
     	overflow: hidden;
     }
-    .wrap {
+    #wrap {
     	width: 100%;
     	height: 100%;
     	background: #00aaee;
     }
-    .btn {
+    #btn {
         position: absolute;
         width: 80px;
         height: 80px;
@@ -39,11 +39,51 @@
 </head>
 
 <body>
-	<div class="wrap">
-        <div class="btn">
-            du.
-        </div>
+	<div id="wrap">
+    <div id="btn">
+    du.
+    </div>
 	</div>
-	<script src="js/hammer.js"></script>
+  <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+  <script src="js/hammer.js"></script>
+  <script type="text/javascript">
+  var scr = document.querySelector("#wrap");
+  var el = document.querySelector("#btn");
+  
+  var mc = new Hammer.Manager(el);
+  
+  var START_X = Math.round((scr.offsetWidth - el.offsetWidth) / 2);
+  var START_Y = Math.round((scr.offsetHeight - el.offsetHeight) / 2);
+  
+  console.info(scr.offsetWidth);
+  console.info(el.offsetTop);
+  
+  var transform;
+  
+  function resetElement() {
+      el.className = 'animate';
+      transform = {
+          translate: { x: START_X, y: START_Y },
+          scale: 1,
+          angle: 0,
+          rx: 0,
+          ry: 0,
+          rz: 0
+      };
+      //requestElementUpdate();
+  }
+  resetElement();
+  mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+
+  mc.on("panstart panmove", onPan);
+
+  function onPan(ev) {
+    el.style.left = START_X + ev.deltaX + 'px';
+    el.style.top = START_Y + ev.deltaY + 'px';
+    //console.info(el.offsetTop);
+    //START_X = el.offsetLeft;
+    //START_Y = el.offsetTop;
+  }
+  </script>
 </body>
 </html>
